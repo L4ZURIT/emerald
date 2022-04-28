@@ -31,3 +31,5 @@ E:\ImpFiles\c#_apps\emerald\emerald\bin\Debug\net6.0-windows\Microsoft.Extension
 E:\ImpFiles\c#_apps\emerald\emerald\bin\Debug\net6.0-windows\Npgsql.dll
 E:\ImpFiles\c#_apps\emerald\emerald\bin\Debug\net6.0-windows\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 E:\ImpFiles\c#_apps\emerald\emerald\obj\Debug\net6.0-windows\emerald.csproj.CopyComplete
+E:\ImpFiles\c#_apps\emerald\emerald\obj\Debug\net6.0-windows\emerald.customer.resources
+E:\ImpFiles\c#_apps\emerald\emerald\obj\Debug\net6.0-windows\emerald.login.resources

@@ -7,27 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using data;
 
 
 namespace emerald
 {
     public partial class main_form : Form
     {
-
+        customer cust_obj;
         dbm pdbm;
-        public main_form()
+        user current_us;
+        public main_form(ref dbm data_base_manager, ref user cur_user)
         {
             InitializeComponent();
-            pan_cust.Hide();    
+            pan_cust.Hide();
             pan_extra.Hide();
             pan_ap.Hide();
-            pan_cont.Hide();    
-            pan_task.Hide();    
+            pan_cont.Hide();
+            pan_task.Hide();
+            pdbm = data_base_manager;
+            current_us = cur_user;
+            cust_obj = new customer(ref pdbm, ref current_us);
+            tp_cust.Controls.Add(cust_obj);
 
-            pdbm = new dbm();
-                   
+
 
         }
+                
 
         private void btn_appeal_Click(object sender, EventArgs e)
         {
@@ -40,8 +46,9 @@ namespace emerald
         {
             pan_extra.Hide();
             tc_main.SelectedTab = tp_customer;
-            //string customers = pdbm.get_customers();
-            //Console.WriteLine(customers);
+            flp_customer_cards.Controls.Clear();
+            flp_customer_cards.Controls.AddRange(pdbm.get_customer_cards(show_selected_customer).ToArray());
+
         }
 
         private void btn_contact_Click(object sender, EventArgs e)
@@ -87,14 +94,30 @@ namespace emerald
 
         private void btn_extra_new_cust_Click(object sender, EventArgs e)
         {
+            //скрываем виджет правого столбца 
             pan_extra.Hide();
+            //выбираем страницу с клиентом
             tc_main.SelectTab(tp_cust);
+            //включение вкладки 
+            pan_cust.Show();
+            btn_cust_open.Text = "Новый клиент";
+            cust_obj.set_cust_add();
+
+            
+        }
+
+        public void show_selected_customer(object sender, EventArgs e)
+        {
+            Button sended = sender as Button;
+            //скрываем виджет правого столбца 
+            pan_extra.Hide();
+            //выбираем страницу с клиентом
+            tc_main.SelectTab(tp_cust);
+            //включение вкладки 
             pan_cust.Show();
             btn_cust_open.Text = "Новый клиент";
 
-            lbl_cust_desc.Hide();
-            tb_cust_desk.Text = "";
-            tb_cust_desk.PlaceholderText = "введите новго клиента";
+            cust_obj.set_cust_show(Convert.ToInt16(sended.Tag));
         }
 
         private void btn_cust_close_Click(object sender, EventArgs e)
@@ -130,9 +153,15 @@ namespace emerald
         private void btn_extra_new_ap_Click(object sender, EventArgs e)
         {
             pan_extra.Hide();
-            tc_main.SelectTab(tp_ap);
-            pan_ap.Show();
-            btn_ap_open.Text = "Новое обращение";
+            MessageBox.Show("Выберете клиента в соответсвующем разделе и в его карточке добавьте новое обращение. Обращение можно Добавить только одитн раз");
+            
+        }
+
+        public void add_new_appeal_card(int customer_id)
+        {
+            tc_main.SelectedTab = tp_appeal;
+            appeal_card card = new appeal_card(show_selected_customer, pdbm, ref current_us, customer_id);
+            this.pnl_appeal_cards.Controls.Add(card);
         }
 
         private void btn_extra_new_cont_Click(object sender, EventArgs e)
@@ -196,10 +225,14 @@ namespace emerald
             pan_cust.Show();
             btn_cust_open.Text = "Новый клиент";
 
-            lbl_cust_desc.Show();
-            lbl_cust_desc.Text = "Вы смотрите клиента из вашей бд";
+           
         }
 
-     
+        private void tb_cust_edit_find_tag_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+      
     }
 }
